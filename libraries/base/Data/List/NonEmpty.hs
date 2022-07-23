@@ -76,6 +76,8 @@ module Data.List.NonEmpty (
    , groupBy1    -- :: (a -> a -> Bool) -> NonEmpty a -> NonEmpty (NonEmpty a)
    , groupWith1     -- :: (Foldable f, Eq b) => (a -> b) -> f a -> NonEmpty (NonEmpty a)
    , groupAllWith1  -- :: (Foldable f, Ord b) => (a -> b) -> f a -> NonEmpty (NonEmpty a)
+   , permutations
+   , permutations1
    -- * Sublist predicates
    , isPrefixOf  -- :: Foldable f => f a -> NonEmpty a -> Bool
    -- * \"Set\" operations
