@@ -392,6 +392,22 @@ groupWith1 f = groupBy1 ((==) `on` f)
 groupAllWith1 :: (Ord b) => (a -> b) -> NonEmpty a -> NonEmpty (NonEmpty a)
 groupAllWith1 f = groupWith1 f . sortWith f
 
+-- | The 'permutations' function returns the list of all permutations of the argument.
+permutations            :: [a] -> NonEmpty [a]
+permutations xs0        =  xs0 :| perms xs0 []
+  where
+    perms []     _  = []
+    perms (t:ts) is = foldr interleave (perms ts (t:is)) (permutations is)
+      where interleave    xs     r = let (_,zs) = interleave' id xs r in zs
+            interleave' _ []     r = (ts, r)
+            interleave' f (y:ys) r = let (us,zs) = interleave' (f . (y:)) ys r
+                                     in  (y:us, f (t:y:us) : zs)
+
+-- | 'permutations1' operates like 'permutations', but uses the knowledge that its input is
+-- non-empty to produce output which every element is non-empty.
+permutations1 :: NonEmpty a -> NonEmpty (NonEmpty a)
+permutations1 xs = fromList <$> permutations (toList xs)
+
 -- | The 'isPrefixOf' function returns 'True' if the first argument is
 -- a prefix of the second.
 isPrefixOf :: Eq a => [a] -> NonEmpty a -> Bool
